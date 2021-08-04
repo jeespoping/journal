@@ -7,6 +7,7 @@ import {useDispatch} from 'react-redux';
 import { login } from '../actions/auth';
 import { PrivateRoute } from './PrivateRoute';
 import { PublicRoute } from './PublicRoute';
+import { startLoadingNotes } from '../actions/notes';
 
 
 export default function AppRoutes() {
@@ -17,9 +18,11 @@ export default function AppRoutes() {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     useEffect(() => {
-        firebase.auth().onAuthStateChanged((user) => {
+        firebase.auth().onAuthStateChanged( (user) => {
             if (user?.uid) {
-                dispatch(login(user.uid, user.displayName));
+                dispatch(login(user.uid, user.displayName));                
+                
+                dispatch(startLoadingNotes(user.uid));
                 setIsLoggedIn(true);
             }else{
                 setIsLoggedIn(false);
@@ -30,7 +33,7 @@ export default function AppRoutes() {
 
     if(checking){
         return(
-            <h1>Espere ...</h1>
+            <h1>Await ...</h1>
         )
     }
 
